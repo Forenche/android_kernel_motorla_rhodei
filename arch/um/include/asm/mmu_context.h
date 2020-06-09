@@ -55,7 +55,7 @@ static inline void activate_mm(struct mm_struct *old, struct mm_struct *new)
 	__switch_mm(&new->context.id);
 	mmap_write_lock_nested(new, SINGLE_DEPTH_NESTING);
 	uml_setup_stubs(new);
-	up_write(&new->mmap_sem);
+	mmap_write_unlock(new);
 }
 
 static inline void switch_mm(struct mm_struct *prev, struct mm_struct *next, 
