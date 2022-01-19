@@ -53,6 +53,8 @@ KBUILD_CFLAGS	+= -mgeneral-regs-only
 endif
 
 KBUILD_CFLAGS	+= $(compat_vdso) $(cc_has_k_constraint)
+KBUILD_CFLAGS	+= -mcpu=cortex-a55
+
 KBUILD_CFLAGS	+= -fno-asynchronous-unwind-tables
 KBUILD_CFLAGS	+= $(call cc-disable-warning, psabi)
 KBUILD_AFLAGS	+= $(compat_vdso)
