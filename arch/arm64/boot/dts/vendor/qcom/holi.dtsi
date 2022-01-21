@@ -2722,15 +2722,6 @@
 
 		status = "disabled";
 
-		qos0 {
-			mask = <0x3f>;
-			vote = <59>;
-		};
-
-		qos1 {
-			mask = <0xc0>;
-			vote = <65>;
-		};
 	};
 
 	sdhc_1: sdhci@4744000 {
@@ -2821,15 +2812,6 @@
 
 		status = "disabled";
 
-		qos0 {
-			mask = <0x3f>;
-			vote = <61>;
-		};
-
-		qos1 {
-			mask = <0xc0>;
-			vote = <67>;
-		};
 	};
 
 	sdhc_2: sdhci@4784000 {
@@ -2880,15 +2862,6 @@
 
 		status = "disabled";
 
-		qos0 {
-			mask = <0x3f>;
-			vote = <61>;
-		};
-
-		qos1 {
-			mask = <0xc0>;
-			vote = <67>;
-		};
 	};
 
 	pil_lpass: qcom,lpass@a400000 {
