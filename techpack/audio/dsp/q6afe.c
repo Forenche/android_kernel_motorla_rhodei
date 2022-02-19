@@ -3952,6 +3952,7 @@ int aw_send_afe_cal_apr(uint32_t rx_port_id, uint32_t tx_port_id,
 	port_index = q6audio_get_port_index(port_id);
 	if (port_index >= AFE_MAX_PORTS) {
 		pr_err("%s: Invalid AFE port = 0x%x\n", __func__, port_id);
+		result = -EINVAL;
 		goto err;
 	}
 
