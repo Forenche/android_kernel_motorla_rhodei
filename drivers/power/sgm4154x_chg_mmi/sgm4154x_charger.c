@@ -1713,6 +1713,7 @@ static int sgm4154x_detected_qc3p_hvdcp(struct sgm4154x_device *sgm, int *charge
 			msleep(30);//need tunning
 
 			schedule_work(&sgm->rerun_apsd_work);
+			return -1;
 		}
 
 		return 0;
@@ -1785,6 +1786,7 @@ static int sgm4154x_detected_qc3p_hvdcp(struct sgm4154x_device *sgm, int *charge
 			msleep(30);//need tunning
 
 			schedule_work(&sgm->rerun_apsd_work);
+			return -1;
 		}
 
 	}
