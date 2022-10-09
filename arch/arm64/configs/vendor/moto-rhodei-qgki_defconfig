@@ -2,11 +2,11 @@
 # Automatically generated file; DO NOT EDIT.
 # Linux/arm64 5.4.147 Kernel Configuration
 #
-CONFIG_CC_VERSION_TEXT="Neutron clang version 16.0.0 (https://github.com/llvm/llvm-project.git afb0b21f24adecfa0b302c79366980453b15ba7b)"
+CONFIG_CC_VERSION_TEXT="Android (9146769, based on r468909b) clang version 15.0.3 (https://android.googlesource.com/toolchain/llvm-project 617109052e5bd421c75c61561ed3c3cbc28abe33)"
 CONFIG_GCC_VERSION=0
 CONFIG_CC_IS_CLANG=y
 CONFIG_LD_IS_LLD=y
-CONFIG_CLANG_VERSION=160000
+CONFIG_CLANG_VERSION=150003
 CONFIG_CC_CAN_LINK=y
 CONFIG_CC_HAS_ASM_GOTO=y
 CONFIG_TOOLS_SUPPORT_RELR=y
@@ -5836,7 +5836,8 @@ CONFIG_VFAT_FS=y
 CONFIG_FAT_DEFAULT_CODEPAGE=437
 CONFIG_FAT_DEFAULT_IOCHARSET="iso8859-1"
 # CONFIG_FAT_DEFAULT_UTF8 is not set
-# CONFIG_EXFAT_FS is not set
+CONFIG_EXFAT_FS=m
+CONFIG_EXFAT_DEFAULT_IOCHARSET="utf8"
 # CONFIG_NTFS_FS is not set
 # end of DOS/FAT/EXFAT/NT Filesystems
 
