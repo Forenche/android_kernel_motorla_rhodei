@@ -149,6 +149,7 @@ x509.genkey
 
 # generated defconfigs
 arch/*/configs/vendor/*_defconfig
+!arch/arm64/configs/vendor/moto-rhodei-qgki_defconfig
 
 # AtomX dir & builder scripts
 AtomX*.sh
