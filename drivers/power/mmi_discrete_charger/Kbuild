@@ -1,10 +1,10 @@
 ccflags-y += -I$(srctree)/$(src)/../mmi_charger \
 	     -I$(srctree)/$(src)/../mmi_charger_discrete
 
+mmi_discrete_charger-objs += mmi_discrete_charger_core.o
+mmi_discrete_charger-objs += mmi_discrete_charger_iio.o
+mmi_discrete_charger-objs += mmi_discrete_voter.o
+mmi_discrete_charger-objs += mmi_discrete_factory_tcmd.o
 obj-$(CONFIG_MMI_DISCRETE_CHARGER) += mmi_discrete_charger.o
-mmi_discrete_charger-y += mmi_discrete_charger_core.o
-mmi_discrete_charger-y += mmi_discrete_charger_iio.o
-mmi_discrete_charger-y += mmi_discrete_voter.o
-mmi_discrete_charger-y += mmi_discrete_factory_tcmd.o
 
 obj-$(CONFIG_MMI_DISCRETE_CHARGER) += mmi_discrete_charger_class.o

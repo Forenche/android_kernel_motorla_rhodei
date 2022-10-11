@@ -1,2 +1,2 @@
-cw2217b_fg_mmi-y += cw2217B_fuel_gauge_base.o
+cw2217b_fg_mmi-objs += cw2217B_fuel_gauge_base.o
 obj-$(CONFIG_CW2217B_FG) += cw2217b_fg_mmi.o
