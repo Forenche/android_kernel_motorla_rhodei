@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # SPDX-License-Identifier: GPL-2.0
 obj-$(CONFIG_LEDS_TRIGGER_TIMER)	+= ledtrig-timer.o
 obj-$(CONFIG_LEDS_TRIGGER_ONESHOT)	+= ledtrig-oneshot.o
@@ -15,3 +16,15 @@ obj-$(CONFIG_LEDS_TRIGGER_PANIC)	+= ledtrig-panic.o
 obj-$(CONFIG_LEDS_TRIGGER_NETDEV)	+= ledtrig-netdev.o
 obj-$(CONFIG_LEDS_TRIGGER_PATTERN)	+= ledtrig-pattern.o
 obj-$(CONFIG_LEDS_TRIGGER_AUDIO)	+= ledtrig-audio.o
+=======
+KERNEL_SRC ?= /lib/modules/$(shell uname -r)/build
+
+all:
+	$(MAKE) -C $(KERNEL_SRC) M=$(M) modules $(KBUILD_OPTIONS)
+
+modules_install:
+	$(MAKE) INSTALL_MOD_STRIP=1 -C $(KERNEL_SRC) M=$(M) modules_install
+
+clean:
+	$(MAKE) -C $(KERNEL_SRC) M=$(PWD) clean
+>>>>>>> ce0726d49fa4daee75c20e0072a1f1dec391e669
