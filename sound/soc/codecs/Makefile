@@ -275,16 +275,6 @@ snd-soc-wm9713-objs := wm9713.o
 snd-soc-wm-hubs-objs := wm_hubs.o
 snd-soc-zx-aud96p22-objs := zx_aud96p22.o
 
-snd-soc-tas2560-objs := tas2560-core.o tas2560-misc.o tas2560-codec.o tas2560-regmap.o
-snd-soc-tas2560_algo-objs := tas2560-algo.o
-snd-soc-tas2560_calib-objs := tas2560-calib.o
-snd-soc-tas2562-objs := tas2562-codec.o tas2562-regmap.o tas25xx-algo.o tas25xx-calib.o
-snd-soc-snd_smartpa_aw882xx-objs := aw882xx.o
-snd-soc-tfa9874-objs := tfa98xx.o tfa_container.o tfa_dsp.o tfa_init.o
-ifdef TFA_DEBUG
-ccflags-y += -DTFA_DEBUG -DDEBUG
-snd-soc-tfa9874-objs += tfa_debug.o
-endif
 # Amp
 snd-soc-max9877-objs := max9877.o
 snd-soc-max98504-objs := max98504.o
