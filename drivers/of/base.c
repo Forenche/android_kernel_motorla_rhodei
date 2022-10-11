@@ -268,20 +268,17 @@ static struct property *__of_find_property(const struct device_node *np,
 	struct property *pp;
 
 	if (!np)
-		goto notfound;
+		return NULL;
 
 	for (pp = np->properties; pp; pp = pp->next) {
 		if (of_prop_cmp(pp->name, name) == 0) {
 			if (lenp)
 				*lenp = pp->length;
-			return pp;
+			break;
 		}
 	}
 
-notfound:
-	if (lenp)
-		*lenp = 0;
-	return NULL;
+	return pp;
 }
 
 struct property *of_find_property(const struct device_node *np,
