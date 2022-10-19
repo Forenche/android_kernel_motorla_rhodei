@@ -13,7 +13,7 @@
 #include <linux/version.h>
 #include <linux/sizes.h>
 
-#define CWFG_ENABLE_LOG 1 /* CHANGE Customer need to change this for enable/disable log */
+#define CWFG_ENABLE_LOG 0 /* CHANGE Customer need to change this for enable/disable log */
 
 #define CW_PROPERTIES "bms"
 
