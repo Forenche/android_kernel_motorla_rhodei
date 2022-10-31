@@ -90,3 +90,4 @@ obj-$(CONFIG_INPUT_IDEAPAD_SLIDEBAR)	+= ideapad_slidebar.o
 
 obj-$(CONFIG_INPUT_EGIS_FPS_MMI)	+= rbs_fps_mmi/
 obj-$(CONFIG_INPUT_FOCAL_FPS_MMI)	+= focal_fps_mmi/
+obj-$(CONFIG_INPUT_QPNP_POWER_ON_MMI)	+= qpnp_power_on_mmi/
