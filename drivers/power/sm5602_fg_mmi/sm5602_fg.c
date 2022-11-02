@@ -265,6 +265,7 @@ struct sm_fg_chip {
 
 static int show_registers(struct seq_file *m, void *data);
 static bool fg_init(struct i2c_client *client);
+extern bool is_factory_mode(void);
 
 static int __fg_read_word(struct i2c_client *client, u8 reg, u16 *val)
 {
@@ -458,35 +459,6 @@ static unsigned int fg_read_ocv(struct sm_fg_chip *sm)
 
 	return ocv; //mV
 }
-
-bool is_factory_mode(void)
-{
-	struct device_node *np = of_find_node_by_path("/chosen");
-	bool factory_mode = false;
-	const char *bootargs = NULL;
-	char *bootmode = NULL;
-	char *end = NULL;
-
-	if (!np)
-		return factory_mode;
-
-	if (!of_property_read_string(np, "bootargs", &bootargs)) {
-		bootmode = strstr(bootargs, "androidboot.mode=");
-		if (bootmode) {
-			end = strpbrk(bootmode, " ");
-			bootmode = strpbrk(bootmode, "=");
-		}
-		if (bootmode &&
-		    end > bootmode &&
-		    strnstr(bootmode, "mot-factory", end - bootmode)) {
-				factory_mode = true;
-		}
-	}
-	of_node_put(np);
-
-	return factory_mode;
-}
-
 
 static int _calculate_battery_temp_ex(struct sm_fg_chip *sm, u16 uval)
 {
