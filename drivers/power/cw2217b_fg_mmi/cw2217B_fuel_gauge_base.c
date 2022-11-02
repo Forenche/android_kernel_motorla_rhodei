@@ -384,6 +384,7 @@ bool is_factory_mode(void)
 
 	return factory_mode;
 }
+EXPORT_SYMBOL(is_factory_mode);
 
 /*
  * The TEMP register is an UNSIGNED 8bit read only register.
