@@ -1,3 +1,8 @@
 config SGM4154X_CHARGER_MMI
 	tristate "SGM4154x Charger"
 	default n
+
+config MMI_QC3P_WT6670_DETECTED
+	bool "30W quickcharge plus detection"
+	depends on SGM4154X_CHARGER_MMI
+	default n
