@@ -3,4 +3,4 @@ EXTRA_CFLAGS += -Wall
 EXTRA_CFLAGS += -I$(ANDROID_BUILD_TOP)/motorola/kernel/modules/include
 
 moto_f_usbnet-objs += f_usbnet.o
-obj-m += moto_f_usbnet.o
+obj-y += moto_f_usbnet.o
