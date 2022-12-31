@@ -14,7 +14,7 @@ ifneq ($(filter m y,$(CONFIG_TCPC_RT1711H)),)
 	obj-$(CONFIG_TCPC_RT1711H)	+= tcpc_rt1711h.o
 endif
 
-ccflags-y += -DCONFIG_TCPC_DEVON_POLLING_TIME
+#ccflags-y += -DCONFIG_TCPC_DEVON_POLLING_TIME
 tcpc_class-objs			+= tcpci_core.o tcpci_typec.o tcpci_timer.o \
 		tcpm.o tcpci.o pd_dbg_info.o tcpci_alert.o rt-regmap.o tcpci_dual_role.o
 
