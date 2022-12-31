@@ -1,6 +1,5 @@
 # add -Wall to try to catch everything we can.
-EXTRA_CFLAGS += -Wall
-EXTRA_CFLAGS += -I$(ANDROID_BUILD_TOP)/motorola/kernel/modules/include
+ccflags-y += -Wall
 
 moto_f_mass_storage-objs += f_mass_storage.o storage_common.o
-obj-m += moto_f_mass_storage.o
+obj-y += moto_f_mass_storage.o
