@@ -1140,6 +1140,8 @@ static void nvt_ts_wakeup_gesture_report_timer(struct timer_list *t)
 
 	ts->double_tap_pressed = (gesture_id == GESTURE_DOUBLE_CLICK) ? 1 : 0;
 	sysfs_notify(&ts->client->dev.kobj, NULL, "double_tap_pressed");
+	ts->single_tap_pressed = (gesture_id == GESTURE_SINGLE_CLICK) ? 1 : 0;
+	sysfs_notify(&ts->client->dev.kobj, NULL, "single_tap_pressed");
 	switch (gesture_id) {
 		case GESTURE_WORD_C:
 			NVT_DBG("Gesture : Word-C.\n");
@@ -2508,7 +2510,7 @@ static int nvt_gesture_name_to_id(const char *name)
 {
 	if (strcmp(name, "double_tap_enabled") == 0)
 		return GESTURE_DOUBLE_CLICK;
-	if (strcmp(name, "single_click") == 0)
+	if (strcmp(name, "single_tap_enabled") == 0)
 		return GESTURE_SINGLE_CLICK;
 
 	NVT_ERR("Unknown gesture name: %s", name);
@@ -2551,6 +2553,14 @@ static ssize_t double_tap_pressed_get(struct device *device,
        return scnprintf(buffer, PAGE_SIZE, "%i\n", ts->double_tap_pressed);
 }
 
+static ssize_t single_tap_pressed_get(struct device *device,
+                               struct device_attribute *attribute,
+                               char *buffer)
+{
+       struct nvt_ts_data *ts = dev_get_drvdata(device);
+       return scnprintf(buffer, PAGE_SIZE, "%i\n", ts->single_tap_pressed);
+}
+
 #endif
 
 static struct device_attribute touchscreen_attributes[] = {
@@ -2568,8 +2578,10 @@ static struct device_attribute touchscreen_attributes[] = {
 	       nvt_gesture_show, nvt_gesture_store),
 	__ATTR(double_tap_pressed, S_IRUSR | S_IRGRP | S_IWUSR | S_IWGRP,
 	       double_tap_pressed_get, NULL),
-	__ATTR(single_click, S_IRUSR | S_IRGRP | S_IWUSR | S_IWGRP,
+	__ATTR(single_tap_enabled, S_IRUSR | S_IRGRP | S_IWUSR | S_IWGRP,
 	       nvt_gesture_show, nvt_gesture_store),
+	__ATTR(single_tap_pressed, S_IRUSR | S_IRGRP | S_IWUSR | S_IWGRP,
+	       single_tap_pressed_get, NULL),
 #endif
 	__ATTR_NULL
 };
