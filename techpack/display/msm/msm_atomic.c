@@ -546,11 +546,11 @@ static void _msm_drm_commit_work_cb(struct kthread_work *work)
 	 * and restrict the current CPU to shallow idle states so that it won't
 	 * take too long to resume after waiting for the prior commit to finish.
 	 */
-	cpu_latency_qos_add_request(&req, 100);
+	pm_qos_add_request(&req, PM_QOS_CPU_DMA_LATENCY, 100);
 	SDE_ATRACE_BEGIN("complete_commit");
 	complete_commit(commit);
 	SDE_ATRACE_END("complete_commit");
-	cpu_latency_qos_remove_request(&req);
+	pm_qos_remove_request(&req);
 
 	complete_commit_cleanup(commit);
 }
