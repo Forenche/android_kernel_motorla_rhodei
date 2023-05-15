@@ -779,7 +779,7 @@ static void msm_audio_add_qos_request(void)
 		dev_pm_qos_add_request(get_cpu_device(cpu),
 			&msm_audio_req[cpu],
 			DEV_PM_QOS_RESUME_LATENCY,
-			PM_QOS_CPU_LATENCY_DEFAULT_VALUE);
+			PM_QOS_CPU_DMA_LAT_DEFAULT_VALUE);
 		pr_debug("%s set cpu affinity to core %d.\n", __func__, cpu);
 	}
 }
@@ -4346,8 +4346,8 @@ err:
 
 static int msm_fe_qos_prepare(struct snd_pcm_substream *substream)
 {
-	if (cpu_latency_qos_request_active(&substream->latency_pm_qos_req))
-		cpu_latency_qos_remove_request(&substream->latency_pm_qos_req);
+	if (pm_qos_request_active(&substream->latency_pm_qos_req))
+		pm_qos_remove_request(&substream->latency_pm_qos_req);
 
 	qos_client_active_cnt++;
 	if (qos_client_active_cnt == 1)
@@ -4363,7 +4363,7 @@ static void msm_fe_qos_shutdown(struct snd_pcm_substream *substream)
 	if (qos_client_active_cnt > 0)
 		qos_client_active_cnt--;
 	if (qos_client_active_cnt == 0)
-		msm_audio_update_qos_request(PM_QOS_CPU_LATENCY_DEFAULT_VALUE);
+		msm_audio_update_qos_request(PM_QOS_CPU_DMA_LAT_DEFAULT_VALUE);
 }
 
 void mi2s_disable_audio_vote(struct snd_pcm_substream *substream)
