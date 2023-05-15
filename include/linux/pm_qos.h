@@ -1,22 +1,22 @@
 /* SPDX-License-Identifier: GPL-2.0 */
-/*
- * Definitions related to Power Management Quality of Service (PM QoS).
- *
- * Copyright (C) 2020 Intel Corporation
- *
- * Authors:
- *	Mark Gross <mgross@linux.intel.com>
- *	Rafael J. Wysocki <rafael.j.wysocki@intel.com>
- */
-
 #ifndef _LINUX_PM_QOS_H
 #define _LINUX_PM_QOS_H
-
+/* interface for the pm_qos_power infrastructure of the linux kernel.
+ *
+ * Mark Gross <mgross@linux.intel.com>
+ */
 #include <linux/plist.h>
 #include <linux/notifier.h>
 #include <linux/device.h>
-#include <linux/cpumask.h>
-#include <linux/interrupt.h>
+#include <linux/workqueue.h>
+
+enum {
+	PM_QOS_RESERVED = 0,
+	PM_QOS_CPU_DMA_LATENCY,
+
+	/* insert new class ID */
+	PM_QOS_NUM_CLASSES,
+};
 
 enum pm_qos_flags_status {
 	PM_QOS_FLAGS_UNDEFINED = -1,
@@ -29,7 +29,7 @@ enum pm_qos_flags_status {
 #define PM_QOS_LATENCY_ANY	S32_MAX
 #define PM_QOS_LATENCY_ANY_NS	((s64)PM_QOS_LATENCY_ANY * NSEC_PER_USEC)
 
-#define PM_QOS_CPU_LATENCY_DEFAULT_VALUE	(2000 * USEC_PER_SEC)
+#define PM_QOS_CPU_DMA_LAT_DEFAULT_VALUE	(2000 * USEC_PER_SEC)
 #define PM_QOS_RESUME_LATENCY_DEFAULT_VALUE	PM_QOS_LATENCY_ANY
 #define PM_QOS_RESUME_LATENCY_NO_CONSTRAINT	PM_QOS_LATENCY_ANY
 #define PM_QOS_RESUME_LATENCY_NO_CONSTRAINT_NS	PM_QOS_LATENCY_ANY_NS
@@ -40,10 +40,22 @@ enum pm_qos_flags_status {
 
 #define PM_QOS_FLAG_NO_POWER_OFF	(1 << 0)
 
+struct pm_qos_request {
+	struct plist_node node;
+	int pm_qos_class;
+	struct delayed_work work; /* for pm_qos_update_request_timeout */
+};
+
+struct pm_qos_flags_request {
+	struct list_head node;
+	s32 flags;	/* Do not change to 64 bit */
+};
+
 enum pm_qos_type {
 	PM_QOS_UNITIALIZED,
 	PM_QOS_MAX,		/* return the largest value */
 	PM_QOS_MIN,		/* return the smallest value */
+	PM_QOS_SUM		/* return the sum */
 };
 
 /*
@@ -54,37 +66,10 @@ enum pm_qos_type {
 struct pm_qos_constraints {
 	struct plist_head list;
 	s32 target_value;	/* Do not change to 64 bit */
-	s32 target_per_cpu[NR_CPUS];
 	s32 default_value;
 	s32 no_constraint_value;
 	enum pm_qos_type type;
 	struct blocking_notifier_head *notifiers;
-};
-
-enum pm_qos_req_type {
-	PM_QOS_REQ_ALL_CORES = 0,
-	PM_QOS_REQ_AFFINE_CORES,
-#ifdef CONFIG_SMP
-	PM_QOS_REQ_AFFINE_IRQ,
-#endif
-};
-
-struct pm_qos_request {
-	unsigned long cpus_affine;
-	enum pm_qos_req_type type;
-#ifdef CONFIG_SMP
-	uint32_t irq;
-
-	/* Internal structure members */
-	struct irq_affinity_notify irq_notify;
-#endif
-	struct plist_node node;
-	struct pm_qos_constraints *qos;
-};
-
-struct pm_qos_flags_request {
-	struct list_head node;
-	s32 flags;	/* Do not change to 64 bit */
 };
 
 struct pm_qos_flags {
@@ -155,21 +140,24 @@ static inline int dev_pm_qos_request_active(struct dev_pm_qos_request *req)
 	return req->dev != NULL;
 }
 
-s32 pm_qos_read_value(struct pm_qos_constraints *c);
 int pm_qos_update_target(struct pm_qos_constraints *c, struct plist_node *node,
 			 enum pm_qos_req_action action, int value);
 bool pm_qos_update_flags(struct pm_qos_flags *pqf,
 			 struct pm_qos_flags_request *req,
 			 enum pm_qos_req_action action, s32 val);
+void pm_qos_add_request(struct pm_qos_request *req, int pm_qos_class,
+			s32 value);
+void pm_qos_update_request(struct pm_qos_request *req,
+			   s32 new_value);
+void pm_qos_update_request_timeout(struct pm_qos_request *req,
+				   s32 new_value, unsigned long timeout_us);
+void pm_qos_remove_request(struct pm_qos_request *req);
 
-int pm_qos_request_for_cpu(int cpu);
-int pm_qos_request_for_cpumask(struct cpumask *mask);
-
-s32 cpu_latency_qos_limit(void);
-bool cpu_latency_qos_request_active(struct pm_qos_request *req);
-void cpu_latency_qos_add_request(struct pm_qos_request *req, s32 value);
-void cpu_latency_qos_update_request(struct pm_qos_request *req, s32 new_value);
-void cpu_latency_qos_remove_request(struct pm_qos_request *req);
+int pm_qos_request(int pm_qos_class);
+int pm_qos_add_notifier(int pm_qos_class, struct notifier_block *notifier);
+int pm_qos_remove_notifier(int pm_qos_class, struct notifier_block *notifier);
+int pm_qos_request_active(struct pm_qos_request *req);
+s32 pm_qos_read_value(struct pm_qos_constraints *c);
 
 #ifdef CONFIG_PM
 enum pm_qos_flags_status __dev_pm_qos_flags(struct device *dev, s32 mask);
