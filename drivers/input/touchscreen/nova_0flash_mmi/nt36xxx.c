@@ -765,7 +765,6 @@ int32_t nvt_read_pid(void)
 	nvt_set_page(ts->mmap->EVENT_BUF_ADDR);
 
 	NVT_LOG("PID=%04X\n", ts->nvt_pid);
-	NVT_LOG("Meow meow");
 
 	return ret;
 }
