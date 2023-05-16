@@ -1235,16 +1235,6 @@ static bool sgm4154x_state_changed(struct sgm4154x_device *sgm,
 		);
 }
 #endif
-static void sgm4154x_dump_register(struct sgm4154x_device * sgm)
-{
-	int i = 0;
-	u32 reg = 0;
-
-	for(i=0; i<=SGM4154x_CHRG_CTRL_f; i++) {
-		mmi_regmap_read(sgm, i, &reg);
-		pr_err("%s REG[0x%x]=0x%x\n", __func__, i, reg);
-	}
-}
 
 int sgm4154x_get_usb_present(struct sgm4154x_device *sgm)
 {
@@ -1426,7 +1416,6 @@ static void charger_monitor_work_func(struct work_struct *work)
 		goto OUT;
 	}
 
-	sgm4154x_dump_register(sgm);
 	pr_err("%s\n",__func__);
 OUT:
 	schedule_delayed_work(&sgm->charge_monitor_work, 10*HZ);
@@ -2696,23 +2685,6 @@ static int sgm4154x_get_real_charger_type(struct charger_device *chg_dev, int *c
 	return 0;
 }
 
-static int sgm4154x_dump_registers(struct charger_device *chg_dev, struct seq_file *m)
-{
-	struct sgm4154x_device *sgm = dev_get_drvdata(&chg_dev->dev);
-	int i = 0;
-	u32 reg = 0;
-	int rc = 0;
-
-	for(i=0; i<=SGM4154x_CHRG_CTRL_f; i++) {
-		rc = mmi_regmap_read(sgm, i, &reg);
-		if (rc)
-			continue;
-		seq_printf(m, "%s REG[0x%x]=0x%x\n", __func__, i, reg);
-	}
-
-	return rc;
-}
-
 static const struct charger_properties sgm4154x_chg_props = {
 	.alias_name = "sgm4154x",
 };
@@ -2731,7 +2703,6 @@ static struct charger_ops sgm4154x_chg_ops = {
 	.set_constant_voltage = sgm4154x_set_charging_voltage,
 	.is_charge_halted = sgm4154x_is_charging_halted,
 
-	.dump_registers = sgm4154x_dump_registers,
 	.is_enabled_charging = sgm4154x_is_enabled_charging,
 	.enable_termination = sgm4154x_enable_termination,
 	.get_qc3p_power = sgm4154x_get_qc3p_power,
