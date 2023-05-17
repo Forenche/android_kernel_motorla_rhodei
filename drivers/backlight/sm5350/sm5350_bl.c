@@ -52,6 +52,9 @@
 #define SM5350_HVLED_SHORT_FAULTS_REG			0xB2
 #define SM5350_LED_FAULT_ENABLES_REG			0xB4
 
+#define sm_info(fmt, ...)	((void)0)
+#define sm_dbg(fmt, ...)	((void)0)
+
 enum backlight_exp_current_align {
 	ALIGN_NONE,
 	ALIGN_AW99703
@@ -280,19 +283,19 @@ static int sm5350_get_dt_data(struct device *dev, struct sm5350_data *drvdata)
 		return -EINVAL;
 	}
 	drvdata->boost_ctl = (!rc ? tmp : 0);
-	pr_debug("%s : boost_ctl=0x%x\n",__func__, drvdata->boost_ctl);
+	sm_dbg("%s : boost_ctl=0x%x\n",__func__, drvdata->boost_ctl);
 
 	rc = of_property_read_u32(of_node, "map-mode", &tmp);
 	drvdata->map_mode= (!rc ? tmp : 1); /* 1: linear, 0: expo, linear as default*/
-	pr_debug("%s : map_mode=0x%x\n",__func__, drvdata->map_mode);
+	sm_dbg("%s : map_mode=0x%x\n",__func__, drvdata->map_mode);
 
 	if (of_property_read_u32(of_node, "current-align-type", &drvdata->led_current_align))
 		drvdata->led_current_align = ALIGN_NONE;
-	pr_debug("%s : led_current_align=0x%x\n",__func__, drvdata->led_current_align);
+	sm_dbg("%s : led_current_align=0x%x\n",__func__, drvdata->led_current_align);
 
 	rc = of_property_read_u32(of_node, "sm5350,default-brightness", &tmp);
 	drvdata->default_brightness= (!rc ? tmp : MAX_BRIGHTNESS);
-	pr_debug("%s : default_brightness=0x%x\n",__func__, drvdata->default_brightness);
+	sm_dbg("%s : default_brightness=0x%x\n",__func__, drvdata->default_brightness);
 
 	rc = of_property_read_u32(of_node, "pwm-cfg", &tmp);
 	if (rc) {
@@ -301,7 +304,7 @@ static int sm5350_get_dt_data(struct device *dev, struct sm5350_data *drvdata)
 		return -EINVAL;
 	}
 	drvdata->pwm_cfg = (!rc ? tmp : 0);
-	pr_debug("%s : pwm_cfg=0x%x\n",__func__, drvdata->pwm_cfg);
+	sm_dbg("%s : pwm_cfg=0x%x\n",__func__, drvdata->pwm_cfg);
 
 	rc = of_property_read_u32(of_node, "ctl-bank-en", &tmp);
 	if (rc) {
@@ -310,14 +313,14 @@ static int sm5350_get_dt_data(struct device *dev, struct sm5350_data *drvdata)
 		return -EINVAL;
 	}
 	drvdata->ctl_bank_en = (!rc ? tmp : 0);
-	pr_debug("%s : ctl_bank_en=0x%x\n",__func__, drvdata->ctl_bank_en);
+	sm_dbg("%s : ctl_bank_en=0x%x\n",__func__, drvdata->ctl_bank_en);
 
 	if (drvdata->ctl_bank_en & 0x01)
 		drvdata->bank_A = true;
 	if (drvdata->ctl_bank_en & 0x02)
 		drvdata->bank_B = true;
 
-	pr_debug("%s : bank_A=%d bank_B=%d\n",__func__, drvdata->bank_A, drvdata->bank_B);
+	sm_dbg("%s : bank_A=%d bank_B=%d\n",__func__, drvdata->bank_A, drvdata->bank_B);
 
 	rc = of_property_read_u32(of_node, "full-scale-current", &tmp);
 	if (rc) {
@@ -327,13 +330,13 @@ static int sm5350_get_dt_data(struct device *dev, struct sm5350_data *drvdata)
 	}
 	drvdata->full_scale_current = (!rc ? tmp : 0);
 
-	pr_info("bank_A = %d, bank_B = %d, pwm_cfg = 0x%x, full_scale_current = 0x%x, map_mode = 0x%x, boost_ctl = 0x%x.\n",
+	sm_info("bank_A = %d, bank_B = %d, pwm_cfg = 0x%x, full_scale_current = 0x%x, map_mode = 0x%x, boost_ctl = 0x%x.\n",
 		drvdata->bank_A, drvdata->bank_B, drvdata->pwm_cfg, drvdata->full_scale_current, drvdata->map_mode, drvdata->boost_ctl);
 
 	drvdata->brt_code_enable = of_property_read_bool(of_node, "brt-code-enable");
 
 	if (drvdata->brt_code_enable == false) {
-		pr_info("%s : brt_code_enable = %d, rc = %d.\n",__func__, drvdata->brt_code_enable, rc);
+		sm_info("%s : brt_code_enable = %d, rc = %d.\n",__func__, drvdata->brt_code_enable, rc);
 		return rc;
 	}
 
@@ -365,7 +368,7 @@ static int sm5350_get_dt_data(struct device *dev, struct sm5350_data *drvdata)
 
 	for (i=0; i < len; i++) {
 		drvdata->brt_code_table[i] = (u16) buf[i];
-		pr_debug("%s : buf=%d i=%d\n",__func__, buf[i], i);
+		sm_dbg("%s : buf=%d i=%d\n",__func__, buf[i], i);
 	}
 end:
 	kfree(buf);
@@ -393,10 +396,10 @@ static int sm5350_read_revision(struct sm5350_data *drvdata)
 		}
 		switch (value) {
 		case 0x00:
-			pr_info("%s sm5350 detected\n", __func__);
+			sm_info("%s sm5350 detected\n", __func__);
 			return 0;
 		default:
-			pr_info("%s unsupported device revision (0x%x)\n",
+			sm_info("%s unsupported device revision (0x%x)\n",
 				__func__, value);
 			break;
 		}

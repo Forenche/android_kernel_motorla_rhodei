@@ -87,8 +87,8 @@ static long mmi_sys_temp_ioctl(struct file *file, unsigned int cmd,
 			return -EACCES;
 		}
 
-		dev_info(&sys_temp_dev->pdev->dev, "name=%s, temperature=%d\n",
-			request.name, request.temperature);
+		/*dev_info(&sys_temp_dev->pdev->dev, "name=%s, temperature=%d\n",
+			request.name, request.temperature);*/
 
 		for (i = 0; i < sys_temp_dev->num_sensors; i++) {
 			if (!strncasecmp(sys_temp_dev->sensor[i].name,
@@ -100,9 +100,9 @@ static long mmi_sys_temp_ioctl(struct file *file, unsigned int cmd,
 			}
 		}
 		if (i >= sys_temp_dev->num_sensors) {
-			dev_info(&sys_temp_dev->pdev->dev,
+			/*dev_info(&sys_temp_dev->pdev->dev,
 				"name %s not supported\n",
-			request.name);
+			request.name);*/
 			ret = -EBADR;
 		}
 		break;
@@ -168,6 +168,12 @@ static void psy_changed_work_func(struct work_struct *work)
 
 				thermal_zone_get_temp(sys_temp_dev->sensor_listener[i].tz_dev,
 						&sys_temp_dev->sensor_listener[i].temp);
+				desc +=
+					sprintf(buf + desc, "%s=%s%d.%d, ",
+					sys_temp_dev->sensor_listener[i].name,
+					sys_temp_dev->sensor_listener[i].temp < 0 ? "-" : "",
+					abs(sys_temp_dev->sensor_listener[i].temp / 1000),
+					abs(sys_temp_dev->sensor_listener[i].temp % 1000));
 			} else {
 				dev_err(&sys_temp_dev->pdev->dev,
 					"Invalid thermal zone\n");
@@ -175,17 +181,9 @@ static void psy_changed_work_func(struct work_struct *work)
 			}
 		}
 
-		for (i = 0; i < num_sensors_listener; i++) {
-			desc +=
-				sprintf(buf + desc, "%s=%s%d.%d, ",
-				sys_temp_dev->sensor_listener[i].name,
-				sys_temp_dev->sensor_listener[i].temp < 0 ? "-" : "",
-				abs(sys_temp_dev->sensor_listener[i].temp / 1000),
-				abs(sys_temp_dev->sensor_listener[i].temp % 1000));
-		}
+		/*dev_info(&sys_temp_dev->pdev->dev,
+				"%s\n", buf);*/
 
-		dev_info(&sys_temp_dev->pdev->dev,
-				"%s\n", buf);
 	return;
 }
 
@@ -286,8 +284,8 @@ static int mmi_sys_temp_probe(struct platform_device *pdev)
 	}
 
 	if (num_sensors_listener <= 0) {
-		dev_info(&sys_temp_dev->pdev->dev,
-				"No configure sensors listener !\n");
+		/*dev_info(&sys_temp_dev->pdev->dev,
+				"No configure sensors listener !\n");*/
 		goto err_sensors_listener;
 	}
 
