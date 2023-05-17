@@ -43,9 +43,7 @@
 #define HEARTBEAT_DISCHARGE_MS 100000
 #define HEARTBEAT_WAKEUP_INTRVAL_NS 70000000000
 
-static bool debug_enabled;
-module_param(debug_enabled, bool, 0400);
-MODULE_PARM_DESC(debug_enabled, "Enable debug for mmi charger driver");
+static bool debug_enabled = false;
 
 static int factory_kill_disable;
 module_param(factory_kill_disable, int, 0644);
@@ -992,15 +990,6 @@ static int mmi_get_charger_profile(struct mmi_charger_chip *chip,
 		mmi_info(chip, "[C:%s]: mmi temp zones: Num: %d\n",
 				charger->driver->name,
 				charger->profile.num_temp_zones);
-		for (i = 0; i < charger->profile.num_temp_zones; i++) {
-			mmi_info(chip, "[C:%s]: mmi temp zones: Zone %d, Temp %d C, " \
-				"Step Volt %d mV, Full Rate %d mA, " \
-				"Taper Rate %d mA\n", charger->driver->name, i,
-				charger->profile.temp_zones[i].temp_c,
-				charger->profile.temp_zones[i].norm_mv,
-				charger->profile.temp_zones[i].fcc_max_ma,
-				charger->profile.temp_zones[i].fcc_norm_ma);
-		}
 	}
 
 	if (of_find_property(node, "mmi,mmi-ffc-zones", &byte_len)) {
@@ -1034,15 +1023,6 @@ static int mmi_get_charger_profile(struct mmi_charger_chip *chip,
 		mmi_info(chip, "[C:%s]: mmi ffc zones: Num: %d\n",
 				charger->driver->name,
 				charger->profile.num_ffc_zones);
-		for (i = 0; i < charger->profile.num_ffc_zones; i++) {
-			mmi_info(chip, "[C:%s]: mmi ffc zones: Zone %d, Temp %d C, " \
-				"FV %d mV, Chg Iterm %d mA, Fg Iterm %d mA\n",
-				charger->driver->name, i,
-				charger->profile.ffc_zones[i].temp,
-				charger->profile.ffc_zones[i].fv,
-				charger->profile.ffc_zones[i].chrg_iterm,
-				charger->profile.ffc_zones[i].fg_iterm);
-		}
 	}
 
 	return 0;
@@ -1310,12 +1290,6 @@ exit:
 	} else {
 		charger->status.temp_zone = &zones[charger->status.pres_temp_zone];
 	}
-	if (prev_zone != charger->status.pres_temp_zone) {
-		mmi_info(chip, "[C:%s]: temp zone switch %x -> %x\n",
-			charger->driver->name,
-			prev_zone,
-			charger->status.pres_temp_zone);
-	}
 }
 
 static void mmi_update_paired_battery(
@@ -1351,7 +1325,7 @@ static void mmi_notify_paired_battery(struct mmi_charger *charger)
 			charger->battery->paired_batt->info);
 }
 
-static void mmi_get_charger_info(struct mmi_charger_chip *chip,
+static void __maybe_unused mmi_get_charger_info(struct mmi_charger_chip *chip,
 				struct mmi_charger *charger)
 {
 	struct mmi_battery_info *batt_info = &charger->batt_info;
@@ -2027,7 +2001,7 @@ static void mmi_charger_heartbeat_work(struct work_struct *work)
 
 	mutex_lock(&chip->charger_lock);
 	list_for_each_entry(charger, &chip->charger_list, list) {
-		mmi_get_charger_info(chip, charger);
+		//mmi_get_charger_info(chip, charger);
 		mmi_update_charger_profile(chip, charger);
 		mmi_reset_charger_configure(chip, charger);
 		mmi_update_charger_status(chip, charger);
@@ -2192,7 +2166,7 @@ void mmi_get_charger_configure(struct mmi_charger_driver *driver)
 	mutex_lock(&chip->charger_lock);
 	list_for_each_entry(charger, &chip->charger_list, list) {
 		if (charger->driver == driver) {
-			mmi_get_charger_info(chip, charger);
+			//mmi_get_charger_info(chip, charger);
 			mmi_update_charger_profile(chip, charger);
 			mmi_reset_charger_configure(chip, charger);
 			mmi_update_charger_status(chip, charger);
