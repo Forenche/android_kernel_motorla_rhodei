@@ -33,25 +33,9 @@
 		"W %s: %s: " fmt, chg->name, __func__, ##__VA_ARGS__); \
 	} while (0)
 
-#define mmi_info(chg, fmt, ...)			\
-	do {						\
-		pr_info("%s: %s: " fmt, chg->name,	\
-		       __func__, ##__VA_ARGS__);	\
-		ipc_log_string(chg->ipc_log,		\
-		"I %s: %s: " fmt, chg->name, __func__, ##__VA_ARGS__); \
-	} while (0)
+#define mmi_info(chg, fmt, ...)	((void)0)
 
-#define mmi_dbg(chg, fmt, ...)			\
-	do {							\
-		if (*chg->debug_enabled)		\
-			pr_info("%s: %s: " fmt, chg->name,	\
-				__func__, ##__VA_ARGS__);	\
-		else						\
-			pr_debug("%s: %s: " fmt, chg->name,	\
-				__func__, ##__VA_ARGS__);	\
-		ipc_log_string(chg->ipc_log,		\
-			"D %s: %s: " fmt, chg->name, __func__, ##__VA_ARGS__); \
-	} while (0)
+#define mmi_dbg(chg, fmt, ...)	((void)0)
 
 #define MMI_LOG_PAGES (50)
 #define MMI_LOG_DIR "mmi_charger"
