@@ -2442,14 +2442,14 @@ static int sgm4154x_suspend_notifier(struct notifier_block *nb,
     switch (event) {
 
     case PM_SUSPEND_PREPARE:
-        pr_err("sgm4154x PM_SUSPEND \n");
+        sgm_info("sgm4154x PM_SUSPEND \n");
 
         sgm->sgm4154x_suspend_flag = 1;
 
         return NOTIFY_OK;
 
     case PM_POST_SUSPEND:
-        pr_err("sgm4154x PM_RESUME \n");
+        sgm_info("sgm4154x PM_RESUME \n");
 
         sgm->sgm4154x_suspend_flag = 0;
 
