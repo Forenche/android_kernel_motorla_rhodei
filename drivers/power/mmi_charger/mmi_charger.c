@@ -1325,7 +1325,7 @@ static void mmi_notify_paired_battery(struct mmi_charger *charger)
 			charger->battery->paired_batt->info);
 }
 
-static void __maybe_unused mmi_get_charger_info(struct mmi_charger_chip *chip,
+static void mmi_get_charger_info(struct mmi_charger_chip *chip,
 				struct mmi_charger *charger)
 {
 	struct mmi_battery_info *batt_info = &charger->batt_info;
@@ -1333,22 +1333,6 @@ static void __maybe_unused mmi_get_charger_info(struct mmi_charger_chip *chip,
 
 	charger->driver->get_batt_info(charger->driver->data, batt_info);
 	charger->driver->get_chg_info(charger->driver->data, chg_info);
-	mmi_info(chip, "[C:%s]: batt_mv %d, batt_ma %d, batt_soc %d,"
-		" batt_temp %d, batt_status %d, batt_sn %s,"
-		" chrg_present %d, chrg_type %d, chrg_pmax_mw %d,"
-		" chrg_mv %d, chrg_ma %d\n",
-		charger->driver->name,
-		batt_info->batt_mv,
-		batt_info->batt_ma,
-		batt_info->batt_soc,
-		batt_info->batt_temp,
-		batt_info->batt_status,
-		batt_info->batt_sn,
-		chg_info->chrg_present,
-		chg_info->chrg_type,
-		chg_info->chrg_pmax_mw,
-		chg_info->chrg_mv,
-		chg_info->chrg_ma);
 }
 
 static void mmi_update_charger_status(struct mmi_charger_chip *chip,
@@ -2001,7 +1985,7 @@ static void mmi_charger_heartbeat_work(struct work_struct *work)
 
 	mutex_lock(&chip->charger_lock);
 	list_for_each_entry(charger, &chip->charger_list, list) {
-		//mmi_get_charger_info(chip, charger);
+		mmi_get_charger_info(chip, charger);
 		mmi_update_charger_profile(chip, charger);
 		mmi_reset_charger_configure(chip, charger);
 		mmi_update_charger_status(chip, charger);
@@ -2166,7 +2150,7 @@ void mmi_get_charger_configure(struct mmi_charger_driver *driver)
 	mutex_lock(&chip->charger_lock);
 	list_for_each_entry(charger, &chip->charger_list, list) {
 		if (charger->driver == driver) {
-			//mmi_get_charger_info(chip, charger);
+			mmi_get_charger_info(chip, charger);
 			mmi_update_charger_profile(chip, charger);
 			mmi_reset_charger_configure(chip, charger);
 			mmi_update_charger_status(chip, charger);
