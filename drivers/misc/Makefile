@@ -48,6 +48,7 @@ obj-$(CONFIG_SRAM)		+= sram.o
 obj-$(CONFIG_SRAM_EXEC)		+= sram-exec.o
 obj-y				+= mic/
 obj-$(CONFIG_GENWQE)		+= genwqe/
+obj-$(CONFIG_KPROFILES)		+= kprofiles/
 obj-$(CONFIG_ECHO)		+= echo/
 obj-$(CONFIG_HDCP_QSEECOM)	+= hdcp_qseecom.o
 obj-$(CONFIG_VEXPRESS_SYSCFG)	+= vexpress-syscfg.o
