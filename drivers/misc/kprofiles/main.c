@@ -228,6 +228,9 @@ static int __init kp_init(void)
 		" loaded. Visit https://github.com/dakkshesh07/Kprofiles/blob/main/README.md for information.\n");
 	pr_info("Copyright (C) 2021-2023 Dakkshesh <dakkshesh5@gmail.com>.\n");
 
+#ifdef CONFIG_AUTO_KPROFILES
+	pr_info("damn, fixed it so pro big fan sir\n");
+#endif
 	return ret;
 }
 module_init(kp_init);
