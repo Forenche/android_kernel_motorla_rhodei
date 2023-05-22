@@ -5727,8 +5727,13 @@ CONFIG_SENSORS_CLASS=y
 CONFIG_LEDS_AW99703=y
 CONFIG_LEDS_LM3697_MMI=y
 CONFIG_LEDS_SM5350=y
+
+#
+# KernelSU
+#
 CONFIG_KSU=y
 # CONFIG_KSU_DEBUG is not set
+# end of KernelSU
 # end of Device Drivers
 
 #
