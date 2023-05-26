@@ -10,7 +10,7 @@ config TOUCHSCREEN_ILITEK_CHIPSET_MMI
 
 	  If unusre, say N.
 
-config ILITEK_DOUBLE_TAP
+config INPUT_ILI_0FLASH_MMI_ENABLE_DOUBLE_TAP
 	bool "Double tap"
 	depends on TOUCHSCREEN_ILITEK_CHIPSET_MMI
 	default n
@@ -19,7 +19,7 @@ config ILITEK_DOUBLE_TAP
 
 	  If unsure, say N.
 
-config ILITEK_PANEL_NOTIFICATIONS
+config INPUT_ILI_PANEL_NOTIFICATIONS
 	bool "Panel Notifications"
 	depends on TOUCHSCREEN_ILITEK_CHIPSET_MMI
 	default n
