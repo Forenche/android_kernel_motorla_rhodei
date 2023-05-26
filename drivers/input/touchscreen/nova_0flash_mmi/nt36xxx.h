@@ -301,7 +301,7 @@ typedef enum {
     EVENT_MAP_PROJECTID                     = 0x9A,
 } SPI_EVENT_MAP;
 
-#ifdef NVT_SET_TOUCH_STATE
+#if defined(NVT_SET_TOUCH_STATE) || defined(NVT_CONFIG_PANEL_NOTIFICATIONS)
 #define MAX_PANEL_IDX 2
 enum touch_panel_id {
 	TOUCH_PANEL_IDX_PRIMARY = 0,
@@ -354,7 +354,7 @@ int32_t nvt_write_addr(uint32_t addr, uint8_t data);
 int32_t nvt_ts_suspend(struct device *dev);
 int32_t nvt_ts_resume(struct device *dev);
 int nvt_set_charger(uint8_t charger_on_off);
-#ifdef NVT_SET_TOUCH_STATE
+#if defined( NVT_SET_TOUCH_STATE) || defined(NVT_CONFIG_PANEL_NOTIFICATIONS)
 int touch_set_state(int state, int panel_idx);
 int check_touch_state(int *state, int panel_idx);
 #endif
