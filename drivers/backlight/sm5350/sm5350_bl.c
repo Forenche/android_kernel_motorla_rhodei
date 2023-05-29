@@ -183,7 +183,7 @@ int sm5350_set_brightness(struct sm5350_data *drvdata, int brt_val)
 	u8 brt_MSB = 0;
 	int index = 0, remainder;
 	int code, code1, code2;
-	printk("%s backlight_val = %d\n",__func__, brt_val);
+	sm_info("%s backlight_val = %d\n",__func__, brt_val);
 
 	if ((drvdata->map_mode == 0) && (drvdata->led_current_align == ALIGN_AW99703))
 		brt_val = brt_val*8383/10000+324;
@@ -199,12 +199,12 @@ int sm5350_set_brightness(struct sm5350_data *drvdata, int brt_val)
 
 		brt_LSB = code % 0x7;
 		brt_MSB = (code >> 3) & 0xFF;
-		printk("brt_LSB_1 %x, brt_MSB_1 %x\n", brt_LSB, brt_MSB);
+		sm_info("brt_LSB_1 %x, brt_MSB_1 %x\n", brt_LSB, brt_MSB);
 	} else {
 		brt_LSB = brt_val & 0x7;
 		brt_MSB = (brt_val >> 3) & 0xFF;
 	}
-	printk("brt_LSB %x, brt_MSB %x\n", brt_LSB, brt_MSB);
+	sm_info("brt_LSB %x, brt_MSB %x\n", brt_LSB, brt_MSB);
 
 	if (drvdata->enable == false)
 		sm5350_init_registers(drvdata);
@@ -419,7 +419,7 @@ static int sm5350_probe(struct i2c_client *client,
 	struct backlight_properties props;
 	int err = 0;
 
-	printk("%s entry\n", __func__);
+	sm_info("%s entry\n", __func__);
 
 	if (!i2c_check_functionality(client->adapter, I2C_FUNC_I2C)) {
 		pr_err("%s : I2C_FUNC_I2C not supported\n", __func__);
@@ -466,7 +466,7 @@ static int sm5350_probe(struct i2c_client *client,
 		goto err_init;
 	}
 	/*sm5350 read revision*/
-	printk("sm-sm5350 detected success\n");
+	sm_info("sm-sm5350 detected success\n");
 
 	memset(&props, 0, sizeof(struct backlight_properties));
 	props.type = BACKLIGHT_PLATFORM;
@@ -482,7 +482,7 @@ static int sm5350_probe(struct i2c_client *client,
 	dump_sm5350_regs(drvdata);
 	sm5350_set_brightness(drvdata, drvdata->default_brightness);
 
-	printk("sm-sm5350 probe okay\n");
+	sm_info("sm-sm5350 probe okay\n");
 	return 0;
 
 err_init:
