@@ -1134,6 +1134,7 @@ static void nvt_ts_wakeup_gesture_report_timer(struct timer_list *t)
 	static int report_cnt = 0;
 #endif
 
+	pr_info("Entered gesture wakeup report fn.\n");
 	ts->double_tap_pressed = (gesture_id == GESTURE_DOUBLE_CLICK) ? 1 : 0;
 	sysfs_notify(&ts->client->dev.kobj, NULL, "double_tap_pressed");
 	ts->single_tap_pressed = (gesture_id == GESTURE_SINGLE_CLICK) ? 1 : 0;
@@ -3526,6 +3527,7 @@ int32_t nvt_ts_suspend(struct device *dev)
 		CTP_SPI_WRITE(ts->client, buf, 2);
 		ts->gesture_enabled = false;
 		ts->wakeable = false;
+		pr_info("Going into deep sleep.\n");
 	}
 #else // WAKEUP_GESTURE
 	//---write command to enter "deep sleep mode"---
@@ -3665,6 +3667,7 @@ static int nvt_drm_notifier_callback(struct notifier_block *self, unsigned long 
 				NVT_LOG("double tap gesture suspend\n");
 				touch_set_state(TOUCH_LOW_POWER_STATE, TOUCH_PANEL_IDX_PRIMARY);
 			} else {
+				pr_info("Deep sleep\n");
 				touch_set_state(TOUCH_DEEP_SLEEP_STATE, TOUCH_PANEL_IDX_PRIMARY);
 			}
 #endif
