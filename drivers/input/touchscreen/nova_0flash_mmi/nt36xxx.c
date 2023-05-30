@@ -3518,7 +3518,7 @@ int32_t nvt_ts_suspend(struct device *dev)
 		enable_irq_wake(ts->client->irq);
 		ts->gesture_enabled = true;
 		ts->wakeable = true;
-
+		pr_info("Going into suspend.\n");
 		NVT_LOG("Enabled touch wakeup gesture\n");
 	} else {
 		//---write command to enter "deep sleep mode"---
@@ -3956,8 +3956,10 @@ static int nvt_pm_resume(struct device *dev)
 
 	atomic_set(&ts->pm_resume, 1);
 
-	if ((ts->gesture_wait_pm) && (ts->gesture_enabled))
+	if ((ts->gesture_wait_pm) && (ts->gesture_enabled)) {
+		pr_info("Wake up interruptible\n");
 		wake_up_interruptible(&ts->pm_wq);
+	}
 
 	return 0;
 }
