@@ -153,6 +153,10 @@ static ssize_t nvt_mmi_edge_store(struct device *dev,
 		struct device_attribute *attr, const char *buf, size_t size);
 static ssize_t nvt_mmi_edge_show(struct device *dev,
 		struct device_attribute *attr, char *buf);
+static ssize_t double_tap_pressed_get(struct device *dev,
+		struct device_attribute *attribute, char *buffer);
+static ssize_t single_tap_pressed_get(struct device *dev,
+                struct device_attribute *attribute, char *buffer);
 
 static DEVICE_ATTR(interpolation, (S_IRUGO | S_IWUSR | S_IWGRP),
 	nvt_mmi_interpolation_show, nvt_mmi_interpolation_store);
@@ -162,6 +166,10 @@ static DEVICE_ATTR(jitter, (S_IRUGO | S_IWUSR | S_IWGRP),
 	nvt_mmi_jitter_show, nvt_mmi_jitter_store);
 static DEVICE_ATTR(edge, (S_IRUGO | S_IWUSR | S_IWGRP),
 	nvt_mmi_edge_show, nvt_mmi_edge_store);
+static DEVICE_ATTR(double_tap_pressed, S_IRUGO,
+	double_tap_pressed_get, NULL);
+static DEVICE_ATTR(single_tap_pressed, S_IRUGO,
+        single_tap_pressed_get, NULL);
 
 #define ADD_ATTR(name) { \
 	if (idx < MAX_ATTRS_ENTRIES)  { \
@@ -2493,61 +2501,21 @@ static int nvt_extend_attribute_group(struct device *dev, struct attribute_group
 }
 
 #if WAKEUP_GESTURE
-static int nvt_gesture_name_to_id(const char *name)
-{
-	if (strcmp(name, "double_tap_enabled") == 0)
-		return GESTURE_DOUBLE_CLICK;
-	if (strcmp(name, "single_tap_enabled") == 0)
-		return GESTURE_SINGLE_CLICK;
-
-	NVT_ERR("Unknown gesture name: %s", name);
-	return -EINVAL;
-}
-
-static ssize_t nvt_gesture_show(struct device *dev,
-				struct device_attribute *attr, char *buf)
-{
-	int gesture_id = nvt_gesture_name_to_id(attr->attr.name);
-	if (gesture_id < 0)
-		return gesture_id;
-
-	return snprintf(buf, PAGE_SIZE, "%d\n", is_gesture_enabled(gesture_id));
-}
-
-static ssize_t nvt_gesture_store(struct device *dev,
-				 struct device_attribute *attr, const char *buf,
-				 size_t count)
-{
-	int rc, val;
-
-	rc = kstrtoint(buf, 10, &val);
-	if (rc)
-		return -EINVAL;
-
-	rc = nvt_gesture_name_to_id(attr->attr.name);
-	if (rc < 0)
-		return rc;
-
-	toggle_gesture(rc, !!val);
-	return count;
-}
-
-static ssize_t double_tap_pressed_get(struct device *device,
+static inline ssize_t double_tap_pressed_get(struct device *dev,
                                struct device_attribute *attribute,
                                char *buffer)
 {
-       struct nvt_ts_data *ts = dev_get_drvdata(device);
+       struct nvt_ts_data *ts = dev_get_drvdata(dev);
        return scnprintf(buffer, PAGE_SIZE, "%i\n", ts->double_tap_pressed);
 }
 
-static ssize_t single_tap_pressed_get(struct device *device,
+static inline ssize_t single_tap_pressed_get(struct device *dev,
                                struct device_attribute *attribute,
                                char *buffer)
 {
-       struct nvt_ts_data *ts = dev_get_drvdata(device);
+       struct nvt_ts_data *ts = dev_get_drvdata(dev);
        return scnprintf(buffer, PAGE_SIZE, "%i\n", ts->single_tap_pressed);
 }
-
 #endif
 
 static struct device_attribute touchscreen_attributes[] = {
@@ -2559,16 +2527,6 @@ static struct device_attribute touchscreen_attributes[] = {
 #endif
 #ifdef EDGE_SUPPRESSION
 	__ATTR(rotate, S_IRUGO | S_IWUSR | S_IWGRP, nvt_edge_reject_show, nvt_edge_reject_store),
-#endif
-#if WAKEUP_GESTURE
-	__ATTR(double_tap_enabled, S_IRUSR | S_IRGRP | S_IWUSR | S_IWGRP,
-	       nvt_gesture_show, nvt_gesture_store),
-	__ATTR(double_tap_pressed, S_IRUSR | S_IRGRP | S_IWUSR | S_IWGRP,
-	       double_tap_pressed_get, NULL),
-	__ATTR(single_tap_enabled, S_IRUSR | S_IRGRP | S_IWUSR | S_IWGRP,
-	       nvt_gesture_show, nvt_gesture_store),
-	__ATTR(single_tap_pressed, S_IRUSR | S_IRGRP | S_IWUSR | S_IWGRP,
-	       single_tap_pressed_get, NULL),
 #endif
 	__ATTR_NULL
 };
