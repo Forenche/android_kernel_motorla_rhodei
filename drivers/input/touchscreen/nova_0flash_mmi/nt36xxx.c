@@ -3306,7 +3306,7 @@ static int32_t nvt_ts_remove(struct spi_device *client)
 #if WAKEUP_GESTURE
 	device_init_wakeup(&ts->input_dev->dev, 0);
 	del_timer_sync(&ts->gt_timer);
-#elif ((defined(NVT_CONFIG_PANEL_NOTIFICATIONS) || defined(NVT_SET_TOUCH_STATE)) && !WAKEUP_GESTURE)
+#if defined(NVT_CONFIG_PANEL_NOTIFICATIONS) || defined(NVT_SET_TOUCH_STATE)
 	touch_set_state(TOUCH_DEEP_SLEEP_STATE, TOUCH_PANEL_IDX_PRIMARY);
 #endif
 #endif
