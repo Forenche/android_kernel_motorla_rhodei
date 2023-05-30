@@ -1151,10 +1151,6 @@ static void nvt_ts_wakeup_gesture_report_timer(struct timer_list *t)
 			NVT_DBG("Gesture : Word-V.\n");
 			keycode = gesture_key_array[2];
 			break;
-		case GESTURE_DOUBLE_CLICK:
-			NVT_DBG("Gesture : Double Click.\n");
-			keycode = gesture_key_array[3];
-			break;
 		case GESTURE_WORD_Z:
 			NVT_DBG("Gesture : Word-Z.\n");
 			keycode = gesture_key_array[4];
@@ -1190,10 +1186,6 @@ static void nvt_ts_wakeup_gesture_report_timer(struct timer_list *t)
 		case GESTURE_SLIDE_RIGHT:
 			NVT_DBG("Gesture : Slide RIGHT.\n");
 			keycode = gesture_key_array[12];
-			break;
-		case GESTURE_SINGLE_CLICK:
-			NVT_DBG("Gesture : Single Click.\n");
-			keycode = gesture_key_array[13];
 			break;
 		default:
 			break;
@@ -2092,8 +2084,6 @@ static int nvt_sensor_init(struct nvt_ts_data *data)
 
 	if (data->report_gesture_key) {
 		__set_bit(EV_KEY, sensor_input_dev->evbit);
-		__set_bit(KEY_SINGLE_CLICK, sensor_input_dev->keybit);
-		__set_bit(KEY_WAKEUP, sensor_input_dev->keybit);
 	} else {
 		__set_bit(EV_ABS, sensor_input_dev->evbit);
 		input_set_abs_params(sensor_input_dev, ABS_DISTANCE,
