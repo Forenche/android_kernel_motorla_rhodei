@@ -1055,11 +1055,6 @@ static void nvt_flash_proc_deinit(void)
 /* function page definition */
 #define FUNCPAGE_GESTURE         1
 
-static inline bool is_gesture_enabled(uint8_t gesture_id)
-{
-	return test_bit(gesture_id, ts->gesture_bits);
-}
-
 static inline void toggle_gesture(uint8_t gesture_id, bool on)
 {
 	if (on)
@@ -1110,17 +1105,9 @@ static void nvt_ts_wakeup_gesture_report(uint8_t gesture_id, uint8_t *data)
 
 	NVT_LOG("gesture_id = %d\n", gesture_id);
 
-	if (!is_gesture_enabled(gesture_id)) {
-		NVT_DBG("gesture_id = %d not enabled, skip.\n", gesture_id);
-		return;
-	}
-
 	// Delay single click for double click detection to complete
-	if (gesture_id == GESTURE_SINGLE_CLICK &&
-	    is_gesture_enabled(GESTURE_DOUBLE_CLICK)) {
-		timeout = msecs_to_jiffies(DT2W_TIME);
-		NVT_LOG("Delay single click as double click is enabled\n");
-	}
+	timeout = msecs_to_jiffies(DT2W_TIME);
+	NVT_LOG("Delay single click as double click is enabled\n");
 
 	atomic_set(&ts->gesture_id, gesture_id);
 	mod_timer(&ts->gt_timer, jiffies + timeout);
