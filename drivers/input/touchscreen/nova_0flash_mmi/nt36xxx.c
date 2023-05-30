@@ -153,10 +153,6 @@ static ssize_t nvt_mmi_edge_store(struct device *dev,
 		struct device_attribute *attr, const char *buf, size_t size);
 static ssize_t nvt_mmi_edge_show(struct device *dev,
 		struct device_attribute *attr, char *buf);
-static ssize_t double_tap_pressed_get(struct device *dev,
-		struct device_attribute *attribute, char *buffer);
-static ssize_t single_tap_pressed_get(struct device *dev,
-                struct device_attribute *attribute, char *buffer);
 
 static DEVICE_ATTR(interpolation, (S_IRUGO | S_IWUSR | S_IWGRP),
 	nvt_mmi_interpolation_show, nvt_mmi_interpolation_store);
@@ -166,10 +162,6 @@ static DEVICE_ATTR(jitter, (S_IRUGO | S_IWUSR | S_IWGRP),
 	nvt_mmi_jitter_show, nvt_mmi_jitter_store);
 static DEVICE_ATTR(edge, (S_IRUGO | S_IWUSR | S_IWGRP),
 	nvt_mmi_edge_show, nvt_mmi_edge_store);
-static DEVICE_ATTR(double_tap_pressed, S_IRUGO,
-	double_tap_pressed_get, NULL);
-static DEVICE_ATTR(single_tap_pressed, S_IRUGO,
-        single_tap_pressed_get, NULL);
 
 #define ADD_ATTR(name) { \
 	if (idx < MAX_ATTRS_ENTRIES)  { \
@@ -2527,6 +2519,12 @@ static struct device_attribute touchscreen_attributes[] = {
 #endif
 #ifdef EDGE_SUPPRESSION
 	__ATTR(rotate, S_IRUGO | S_IWUSR | S_IWGRP, nvt_edge_reject_show, nvt_edge_reject_store),
+#endif
+#if WAKEUP_GESTURE
+	__ATTR(double_tap_pressed, S_IRUGO,
+		double_tap_pressed_get, NULL),
+	__ATTR(single_tap_pressed, S_IRUGO,
+		single_tap_pressed_get, NULL),
 #endif
 	__ATTR_NULL
 };
