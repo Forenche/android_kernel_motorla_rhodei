@@ -152,6 +152,7 @@ AtomX*
 out/
 banana.sh
 gcc*
+log.txt
 
 # Update prebuilts
 update_prebuilts.sh
