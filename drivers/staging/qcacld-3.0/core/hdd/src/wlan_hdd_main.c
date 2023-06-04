@@ -243,6 +243,7 @@ static unsigned int dev_num = 1;
 static struct cdev wlan_hdd_state_cdev;
 static struct class *class;
 static dev_t device;
+static bool hdd_loaded = false;
 
 /* the Android framework expects this param even though we don't use it */
 #define BUF_LEN 20
@@ -17714,6 +17715,7 @@ int hdd_driver_load(void)
 		goto pld_deinit;
 	}
 
+	hdd_loaded = true;
 	hdd_debug("%s: driver loaded", WLAN_MODULE_NAME);
 
 	return 0;
