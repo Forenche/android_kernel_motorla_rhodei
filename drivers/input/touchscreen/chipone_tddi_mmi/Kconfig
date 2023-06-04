@@ -1,0 +1,11 @@
+config TOUCHSCREEN_CHIPONE_TDDI
+	tristate "Chipone TDDI"
+	default n
+	help
+	Say Y if you want to build the driver inline or m if you want to build it as a module.
+
+config CONFIG_CHIPONE_ESD
+	bool "Enable ESD checks for Chipone TDDI"
+	depends on TOUCHSCREEN_CHIPONE_TDDI
+	default n
+	
