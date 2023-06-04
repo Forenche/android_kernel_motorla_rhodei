@@ -541,4 +541,5 @@ source "drivers/misc/cardreader/Kconfig"
 source "drivers/misc/habanalabs/Kconfig"
 
 source "drivers/misc/ldo_vibrator_mmi/Kconfig"
+source "drivers/misc/mmi_sys_temp/Kconfig"
 endmenu
