@@ -232,4 +232,6 @@ source "drivers/counter/Kconfig"
 
 source "drivers/backlight/Kconfig"
 
+source "drivers/sensors/Kconfig"
+
 endmenu

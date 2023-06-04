@@ -187,4 +187,5 @@ obj-$(CONFIG_GNSS)		+= gnss/
 obj-$(CONFIG_INTERCONNECT)	+= interconnect/
 obj-$(CONFIG_COUNTER)		+= counter/
 
+obj-$(CONFIG_SENSORS_CLASS)	+= sensors/
 obj-y				== backlight/
