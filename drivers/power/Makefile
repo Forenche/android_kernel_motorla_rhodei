@@ -4,6 +4,7 @@ obj-$(CONFIG_POWER_RESET)	+= reset/
 obj-$(CONFIG_POWER_SUPPLY)	+= supply/
 obj-$(CONFIG_MMI_DISCRETE_CHARGER)	+= mmi_discrete_charger/
 obj-$(CONFIG_MMI_CHARGER)	+= mmi_charger/
+obj-$(CONFIG_QPNP_ADAPTIVE_CHARGE)	+= qpnp_adaptive_charge/
 obj-$(CONFIG_BQ2589X_CHARGER)	+= bq2589x_chg_mmi/
 obj-$(CONFIG_SGM4154X_CHARGER)	+= sgm4154x_chg_mmi/
 obj-$(CONFIG_CW2217B_FG)	+= cw2217b_fg_mmi/
