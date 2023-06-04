@@ -5,3 +5,5 @@ source "drivers/power/supply/Kconfig"
 
 source "drivers/power/bq2589x_chg_mmi/Kconfig"
 source "drivers/power/sgm4154x_chg_mmi/Kconfig"
+source "drivers/power/cw2217b_fg_mmi/Kconfig"
+source "drivers/power/sm5602_fg_mmi/Kconfig"
