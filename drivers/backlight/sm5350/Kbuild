@@ -1,0 +1,2 @@
+obj-$(CONFIG_LEDS_SM5350)   += sm5350_bl.o
+
