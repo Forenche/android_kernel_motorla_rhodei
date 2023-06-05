@@ -2147,34 +2147,7 @@ EXPORT_SYMBOL(mmi_get_battery_serialnumber);
 
 bool mmi_is_factory_mode(void)
 {
-	struct device_node *np = of_find_node_by_path("/chosen");
-	bool factory_mode = false;
-	const char *bootargs = NULL;
-	char *bootmode = NULL;
-	char *end = NULL;
-
-	if ((this_chip && this_chip->factory_mode) ||
-	    !strncmp(bi_bootmode(), "mot-factory", 11))
-		return true;
-
-	if (!np)
-		return factory_mode;
-
-	if (!of_property_read_string(np, "bootargs", &bootargs)) {
-		bootmode = strstr(bootargs, "androidboot.mode=");
-		if (bootmode) {
-			end = strpbrk(bootmode, " ");
-			bootmode = strpbrk(bootmode, "=");
-		}
-		if (bootmode &&
-		    end > bootmode &&
-		    strnstr(bootmode, "factory", end - bootmode)) {
-				factory_mode = true;
-		}
-	}
-	of_node_put(np);
-
-	return factory_mode;
+	return false;
 }
 EXPORT_SYMBOL(mmi_is_factory_mode);
 
