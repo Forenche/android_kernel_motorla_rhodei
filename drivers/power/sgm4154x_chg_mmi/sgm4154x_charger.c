@@ -780,7 +780,7 @@ static int sgm4154x_get_state(struct sgm4154x_device *sgm,
 	state->therm_stat = !!(chrg_stat & SGM4154x_THERM_STAT);
 	state->vsys_stat = !!(chrg_stat & SGM4154x_VSYS_STAT);
 
-	pr_err("%s chrg_stat =%d,chrg_type =%d online = %d\n",__func__,state->chrg_stat,state->chrg_type,state->online);
+	sgm_info("%s chrg_stat =%d,chrg_type =%d online = %d\n",__func__,state->chrg_stat,state->chrg_type,state->online);
 
 
 	ret = mmi_regmap_read(sgm, SGM4154x_CHRG_FAULT, &fault);
@@ -1419,7 +1419,7 @@ static void charger_monitor_work_func(struct work_struct *work)
 		goto OUT;
 	}
 
-	pr_err("%s\n",__func__);
+	sgm_info("%s\n",__func__);
 OUT:
 	schedule_delayed_work(&sgm->charge_monitor_work, 10*HZ);
 }
