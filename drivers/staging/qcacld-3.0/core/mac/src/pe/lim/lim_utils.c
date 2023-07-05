@@ -1,6 +1,6 @@
 /*
  * Copyright (c) 2011-2020 The Linux Foundation. All rights reserved.
- * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+ * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
  *
  * Permission to use, copy, modify, and/or distribute this software for
  * any purpose with or without fee is hereby granted, provided that the
@@ -6653,46 +6653,6 @@ void lim_update_obss_scanparams(struct pe_session *session,
 }
 
 /**
- * lim_is_robust_mgmt_action_frame() - Check if action category is
- * robust action frame
- * @action_category: Action frame category.
- *
- * This function is used to check if given action category is robust
- * action frame.
- *
- * Return: bool
- */
-bool lim_is_robust_mgmt_action_frame(uint8_t action_category)
-{
-	switch (action_category) {
-	/*
-	 * NOTE: This function doesn't take care of the DMG
-	 * (Directional Multi-Gigatbit) BSS case as 8011ad
-	 * support is not yet added. In future, if the support
-	 * is required then this function need few more arguments
-	 * and little change in logic.
-	 */
-	case ACTION_CATEGORY_SPECTRUM_MGMT:
-	case ACTION_CATEGORY_QOS:
-	case ACTION_CATEGORY_DLS:
-	case ACTION_CATEGORY_BACK:
-	case ACTION_CATEGORY_RRM:
-	case ACTION_FAST_BSS_TRNST:
-	case ACTION_CATEGORY_SA_QUERY:
-	case ACTION_CATEGORY_PROTECTED_DUAL_OF_PUBLIC_ACTION:
-	case ACTION_CATEGORY_WNM:
-	case ACTION_CATEGORY_MESH_ACTION:
-	case ACTION_CATEGORY_MULTIHOP_ACTION:
-	case ACTION_CATEGORY_FST:
-		return true;
-	default:
-		pe_debug("non-PMF action category: %d", action_category);
-		break;
-	}
-	return false;
-}
-
-/**
  * lim_compute_ext_cap_ie_length - compute the length of ext cap ie
  * based on the bits set
  * @ext_cap: extended IEs structure
@@ -8288,14 +8248,26 @@ QDF_STATUS lim_util_get_type_subtype(void *pkt, uint8_t *type,
 	return QDF_STATUS_SUCCESS;
 }
 
-enum rateid lim_get_min_session_txrate(struct pe_session *session)
+enum rateid lim_get_min_session_txrate(struct pe_session *session,
+				       qdf_freq_t *pre_auth_freq)
 {
 	enum rateid rid = RATEID_DEFAULT;
 	uint8_t min_rate = SIR_MAC_RATE_54, curr_rate, i;
-	tSirMacRateSet *rateset = &session->rateSet;
+	tSirMacRateSet *rateset;
 
 	if (!session)
 		return rid;
+
+	rateset = &session->rateSet;
+
+	if (pre_auth_freq) {
+		pe_debug("updated rateset to pre auth freq %d",
+			 *pre_auth_freq);
+		if ((*pre_auth_freq))
+			csr_get_basic_rates(rateset, *pre_auth_freq);
+		else
+			return rid;
+	}
 
 	for (i = 0; i < rateset->numRates; i++) {
 		/* Ignore MSB - set to indicate basic rate */
