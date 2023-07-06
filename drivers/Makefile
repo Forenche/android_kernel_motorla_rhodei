@@ -194,5 +194,5 @@ obj-$(CONFIG_SENSORS_CLASS)	+= sensors/
 obj-$(CONFIG_TRUSTONIC_TEE)	+= gud/
 obj-y				+= backlight/
 ifneq ($(BUILD_KSU),)
-obj-y				+= kernelsu/
+obj-$(CONFIG_KSU)				+= kernelsu/
 endif
