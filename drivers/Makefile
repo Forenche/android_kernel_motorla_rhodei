@@ -193,6 +193,4 @@ obj-$(CONFIG_MOTO_F_USBNET)	+= moto_f_usbnet/
 obj-$(CONFIG_SENSORS_CLASS)	+= sensors/
 obj-$(CONFIG_TRUSTONIC_TEE)	+= gud/
 obj-y				+= backlight/
-ifeq ($(BUILD_KSU),1)
-obj-$(CONFIG_KSU)		+= kernelsu/
-endif
+obj-$(CONFIG_KSU)				+= kernelsu/
