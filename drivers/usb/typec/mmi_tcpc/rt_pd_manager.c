@@ -27,7 +27,7 @@
 
 #define RT_PD_MANAGER_VERSION	"0.0.8_G"
 
-#define PROBE_CNT_MAX			3
+#define PROBE_CNT_MAX			7
 /* 10ms * 100 = 1000ms = 1s */
 #define USB_TYPE_POLLING_INTERVAL	10
 #define USB_TYPE_POLLING_CNT_MAX	100
