@@ -3946,12 +3946,17 @@ Description:
 return:
 	Executive Outcomes. 0---succeed. not 0---failed.
 ********************************************************/
+extern bool is_nvt_panel;
 static int32_t __init nvt_driver_init(void)
 {
 	int32_t ret = 0;
 
 	NVT_LOG("start\n");
 
+	//---check for NVT panel
+	if (!is_nvt_panel == true) {
+		return -ENODEV;
+	}
 	//---add spi driver---
 	ret = spi_register_driver(&nvt_spi_driver);
 	if (ret) {

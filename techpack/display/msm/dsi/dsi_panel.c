@@ -2026,6 +2026,7 @@ static int dsi_panel_parse_dyn_clk_caps(struct dsi_panel *panel)
 	return 0;
 }
 
+bool is_nvt_panel;
 int dsi_panel_parse_panel_cfg(struct dsi_panel *panel, bool is_primary)
 {
 	struct device_node *np;
@@ -2073,6 +2074,8 @@ int dsi_panel_parse_panel_cfg(struct dsi_panel *panel, bool is_primary)
 		(panel_ver & 0xff0000) >> 16);
 
 	of_node_put(np);
+
+	is_nvt_panel = strstr(panel->panel_name, "nt36672c_120hz_fhd_plus_vid") ? true : false;
 
 	return 0;
 }

@@ -1142,8 +1142,12 @@ static void ili_update_tp_module_info(void)
 			ilits->md_fw_ili_size);
 }
 
+extern bool is_nvt_panel;
 int ili_tddi_init(void)
 {
+	if (is_nvt_panel == true)
+		return -ENODEV;
+
 #if (BOOT_FW_UPDATE | HOST_DOWN_LOAD)
 	struct task_struct *fw_boot_th;
 #endif
